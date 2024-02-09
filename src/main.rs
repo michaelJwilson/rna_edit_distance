@@ -27,6 +27,44 @@ impl Node {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        assert_eq!(2 + 2, 4);
+    }
+
+    #[test]
+    fn test_node_creation() {
+        let node: Node = Node::new("test".to_string());
+
+        assert_eq!(node.name, "test");
+        assert!(node.children.is_empty());
+        assert!(node.states.is_empty());
+    }
+
+    #[test]
+    fn test_add_child() {
+        let mut parent: Node = Node::new("parent".to_string());
+        let child: Node = Node::new("child".to_string());
+
+        parent.add_child(child);
+
+        assert_eq!(parent.children.len(), 1);
+        assert_eq!(parent.children[0].name, "child");
+    }
+
+    #[test]
+    fn test_set_state() {
+        let mut node = Node::new("test".to_string());
+        node.set_state("A".to_string(), 0);
+        
+        assert_eq!(node.states.get("A"), Some(&0));
+    }
+}
+
 fn main() {
     let root = Node::new("root".to_string());
 
