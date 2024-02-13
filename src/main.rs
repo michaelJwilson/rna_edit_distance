@@ -1,8 +1,17 @@
 use rna_edit_distance::levenshtein_distance;
+use std::env;
 
 fn main() {
-    let s1: &str = "kitten";
-    let s2: &str = "sitting";
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() != 3 {
+        eprintln!("Usage: rna_edit_distance first_string second_string");
+
+        std::process::exit(1);
+    }
+
+    let s1: &String = &args[1];
+    let s2: &String = &args[2];
 
     let distance: Result<u64, &str> = levenshtein_distance(s1, s2);
 
@@ -12,6 +21,6 @@ fn main() {
             s1, s2, value
         );
     } else if let Err(err) = distance {
-        println!("Oops, there is an error: {}", err);
+        eprintln!("Oops, an error was found: {}", err);
     }
 }
