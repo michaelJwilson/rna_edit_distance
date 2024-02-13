@@ -1,82 +1,107 @@
-use std::collections::HashMap;
+use rna_edit_distance::simulate_rna;
+use std::cmp::min;
 
-#[derive(Debug)]
-struct Node {
-    name: String,
-    children: Vec<Node>,
-    states: HashMap<String, u32>,
-}
+const LEV_ERR_MSG: &'static str = "Input strings are not allowed to contain 'z'.";
 
-impl Node {
-    fn new(name: String) -> Self {
-        Node {
-            name,
-            children: Vec::new(),
-            states: HashMap::new(),
+fn levenshtein_distance(s1: &str, s2: &str) -> Result<u64, &'static str> {
+    let len1: usize = s1.len();
+    let len2: usize = s2.len();
+
+    if s1.contains('z') || s2.contains('z') {
+        return Err(LEV_ERR_MSG);
+    }
+
+    let mut matrix: Vec<Vec<u64>> = vec![vec![0; len2 + 1]; len1 + 1];
+
+    for i in 0..=len1 {
+        matrix[i][0] = i as u64;
+    }
+
+    for j in 0..=len2 {
+        matrix[0][j] = j as u64;
+    }
+
+    for j in 1..=len2 {
+        for i in 1..=len1 {
+            // no operation required
+            if s1.chars().nth(i - 1) == s2.chars().nth(j - 1) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = 1 + min(
+                    // substitution
+                    matrix[i - 1][j - 1],
+                    min(
+                        // insertion
+                        matrix[i][j - 1],
+                        // deletion
+                        matrix[i - 1][j],
+                    ),
+                );
+            }
         }
     }
 
-    // NB no return syntax here.
-    fn add_child(&mut self, child: Node) {
-        self.children.push(child);
-    }
-
-    // NB no return syntax here.
-    fn set_state(&mut self, state: String, value: u32) {
-        self.states.insert(state, value);
-    }
+    Ok(matrix[len1][len2])
 }
 
 #[cfg(test)]
-mod tests {
+mod test_edit_distance {
     use super::*;
 
     #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
+    fn test_simulate_rna() {
+        let sequence: String = simulate_rna(10);
+
+        assert_eq!(sequence.len(), 10);
+
+        for c in sequence.chars() {
+            assert!(matches!(c, 'A' | 'C' | 'G' | 'U'));
+        }
     }
 
     #[test]
-    fn test_node_creation() {
-        let node: Node = Node::new("test".to_string());
-
-        assert_eq!(node.name, "test");
-        assert!(node.children.is_empty());
-        assert!(node.states.is_empty());
+    fn test_levenshtein_distance() {
+        assert_eq!(levenshtein_distance("kitten", "sitting").unwrap(), 3);
+        assert_eq!(levenshtein_distance("saturday", "sunday").unwrap(), 3);
+        assert_eq!(levenshtein_distance("rust", "rust").unwrap(), 0);
+        assert_eq!(levenshtein_distance("rust", "").unwrap(), 4);
+        assert_eq!(levenshtein_distance("", "").unwrap(), 0);
     }
 
     #[test]
-    fn test_add_child() {
-        let mut parent: Node = Node::new("parent".to_string());
-        let child: Node = Node::new("child".to_string());
-
-        parent.add_child(child);
-
-        assert_eq!(parent.children.len(), 1);
-        assert_eq!(parent.children[0].name, "child");
+    fn test_error_on_input_z() {
+        match levenshtein_distance("kitten", "sittingz") {
+            Ok(_) => panic!("Expected an error, but got Ok"),
+            Err(e) => assert_eq!(e, "Input strings are not allowed to contain 'z'."),
+        }
     }
 
     #[test]
-    fn test_set_state() {
-        let mut node = Node::new("test".to_string());
-        node.set_state("A".to_string(), 0);
-        
-        assert_eq!(node.states.get("A"), Some(&0));
+    fn test_levenshtein_distance_with_simulated_rna() {
+        let rna1: &str = &simulate_rna(100);
+        let rna2: &str = &simulate_rna(100);
+
+        // Since the sequences are random, we can't know the exact distance,
+        // but we know it should be between 0 (if they happen to be identical)
+        // and 100 (if they are completely different).
+        let distance: u64 = levenshtein_distance(rna1, rna2).unwrap();
+
+        assert!(distance >= 0 && distance <= 100);
     }
 }
 
 fn main() {
-    let root = Node::new("root".to_string());
+    let s1: &str = "kitten";
+    let s2: &str = "sitting";
 
-    println!("Initialised root!");
-    println!("{:?}", root);
+    let distance: Result<u64, &str> = levenshtein_distance(s1, s2);
 
-    let mut states: HashMap<&str, Result<i32, &str>>= HashMap::new();
-
-    states.insert("a",Ok(1));
-    states.insert("b", Ok(2));
-
-    let new_score: &Result<i32, &str> = states.get("b").unwrap();
-
-    println!("{:?}", new_score);
+    if let Ok(value) = distance {
+        println!(
+            "The Levenshtein distance between '{}' and '{}' is {}",
+            s1, s2, value
+        );
+    } else if let Err(err) = distance {
+        println!("Oops, there is an error: {}", err);
+    }
 }
