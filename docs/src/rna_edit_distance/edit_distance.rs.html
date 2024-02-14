@@ -113,6 +113,7 @@
 <a href="#112" id="112">112</a>
 <a href="#113" id="113">113</a>
 <a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cmp::min;
 
 <span class="kw">const </span>LEV_ERR_MSG: <span class="kw-2">&amp;</span>str = <span class="string">"Input strings are not allowed to contain 'z'."</span>;
@@ -140,6 +141,7 @@
     assert_eq!(distance, 3);
     '''
 */
+</span><span class="attr">#[allow(clippy::needless_range_loop)]
 </span><span class="kw">pub fn </span>levenshtein_distance(s1: <span class="kw-2">&amp;</span>str, s2: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;u64, <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; {
     <span class="kw">let </span>len1: usize = s1.len();
     <span class="kw">let </span>len2: usize = s2.len();
