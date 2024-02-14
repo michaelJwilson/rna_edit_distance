@@ -19,6 +19,7 @@ repos:
     rev: "v1.0"
     hooks:
       - id: fmt
+        args: ['--verbose', '--edition', '2021', '--']
       - id: clippy
       - id: cargo-check
   - repo: https://github.com/codespell-project/codespell
