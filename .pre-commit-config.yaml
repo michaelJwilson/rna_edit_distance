@@ -18,6 +18,8 @@ repos:
   - repo: https://github.com/doublify/pre-commit-rust
     rev: "v1.0"
     hooks:
+      - id: fmt
+      - id: clippy
       - id: cargo-check
   - repo: https://github.com/codespell-project/codespell
     rev: "v2.2.6"
@@ -27,5 +29,4 @@ repos:
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.27.3
     hooks:
-      - id: check-readthedocs
       - id: check-github-workflows
