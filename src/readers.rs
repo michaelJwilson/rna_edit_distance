@@ -3,14 +3,21 @@ use serde::Deserialize;
 use std::error::Error;
 use std::fmt;
 
-#[derive(Debug, Deserialize, Clone)]
-pub struct Record {
+#[derive(Debug, Deserialize)]
+struct CsvRecord {
     location: String,
     size: String,
     feature: String,
 }
 
-impl fmt::Display for Record {
+#[derive(Debug, Clone)]
+pub struct CustomRecord {
+    location: String,
+    size: u64,
+    feature: String,
+}
+
+impl fmt::Display for CustomRecord {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
@@ -20,16 +27,31 @@ impl fmt::Display for Record {
     }
 }
 
-pub fn read_csv(filename: &str) -> Result<Vec<Record>, Box<dyn Error>> {
+pub fn parse_record_size(size: &str) -> Result<u64, std::num::ParseIntError> {
+    let no_underscores = size.replace("'_'", "");
+
+    no_underscores.parse::<u64>()
+}
+
+pub fn read_csv(filename: &str) -> Result<Vec<CustomRecord>, Box<dyn Error>> {
     let mut rdr = Reader::from_path(filename)?;
     let mut result = Vec::new();
 
     for record in rdr.deserialize() {
-        let instance: Record = record?;
+        let instance: CsvRecord = record?;
 
-        result.push(instance.clone());
+        let parsed_size = parse_record_size(&instance.size)
+            .map_err(|_| "Failed to parse size for custom record")?;
 
-        println!("\n{}", instance);
+        let custom_record = CustomRecord {
+            location: instance.location,
+            size: parsed_size,
+            feature: instance.feature,
+        };
+
+        result.push(custom_record.clone());
+
+        println!("\n{}", custom_record);
     }
 
     Ok(result)
@@ -52,7 +74,7 @@ mod test_read_csv {
 
         for record in records {
             assert!(!record.location.is_empty());
-            assert!(!record.size.is_empty());
+            assert!(record.size > 0);
             assert!(!record.feature.is_empty());
         }
     }
