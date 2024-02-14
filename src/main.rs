@@ -1,4 +1,4 @@
-use rna_edit_distance::{levenshtein_distance, calc_base_frac};
+use rna_edit_distance::levenshtein_distance;
 use std::env;
 
 fn main() {
