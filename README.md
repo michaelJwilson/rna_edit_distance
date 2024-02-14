@@ -4,7 +4,7 @@ A basic package for RNA sequence analysis, as an example of a working Rust execu
 For instance, it calculates the edit distance between two strings and calls an external C library for calculating the fraction of each base in a sequence.
 
 ## Prerequisites
-- Rust 1.54.0 or later
+- Rust 1.76.0 or later
 - C compiler (gcc, clang, etc.)
 
 ## Building
