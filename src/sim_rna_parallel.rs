@@ -1,18 +1,17 @@
 use crate::sim_rna::simulate_rna;
 use rayon::prelude::*;
 
-pub fn simulate_rna_parallel(n: usize, length: usize) -> Vec<String> {
-    /*
-    Simulates the generation of `n` RNA sequences of a given `length` in parallel.
+/**
+    Simulates the generation of `n` RNA sequences of a given `length` using multiple threads.
 
     This function uses rayon's parallel iterators to generate the RNA sequences concurrently.
 
     Arguments:
-        * `n` - The number of RNA sequences to generate.
-        * `length` - The length of each RNA sequence.
+        * 'n' - The number of RNA sequences to generate.
+        * 'length' - The length of each RNA sequence.
 
     Returns:
-        A `Vec<String>` containing `n` RNA sequences, each of length `length`.
+        A `Vec<String>` containing 'n' RNA sequences, each of length 'length'.
 
     Example:
 
@@ -20,8 +19,8 @@ pub fn simulate_rna_parallel(n: usize, length: usize) -> Vec<String> {
 
     assert_eq!(sequences.len(), 100);
     assert!(sequences.iter().all(|seq| seq.len() == 50));
-    */
-
+*/
+pub fn simulate_rna_parallel(n: usize, length: usize) -> Vec<String> {
     (0..n)
         .into_par_iter()
         .map(|_| simulate_rna(length))

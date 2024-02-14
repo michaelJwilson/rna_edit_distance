@@ -1,15 +1,14 @@
 use rand::{prelude::ThreadRng, thread_rng, Rng};
-
-pub fn simulate_rna(length: usize) -> String {
-    /*
+/**
     Generates a random RNA sequence of the given length.
 
     # Arguments
-        * `length` - The length of the RNA sequence to generate.
+    * 'length' - The length of the RNA sequence to generate.
 
     # Returns
-        * `String` RNA sequence. Each character is one of 'A', 'C', 'G', or 'U'.
-    */
+    * 'String' RNA sequence. Each character is one of 'A', 'C', 'G', or 'U'.
+*/
+pub fn simulate_rna(length: usize) -> String {
     let nucleotides: [char; 4] = ['A', 'C', 'G', 'U'];
 
     let mut sequence: String = String::with_capacity(length);
