@@ -25,6 +25,7 @@ const LEV_ERR_MSG: &str = "Input strings are not allowed to contain 'z'.";
     assert_eq!(distance, 3);
     '''
 */
+#[allow(clippy::needless_range_loop)]
 pub fn levenshtein_distance(s1: &str, s2: &str) -> Result<u64, &'static str> {
     let len1: usize = s1.len();
     let len2: usize = s2.len();
