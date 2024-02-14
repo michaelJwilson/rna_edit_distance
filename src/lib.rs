@@ -40,6 +40,5 @@ pub use sim_rna::simulate_rna;
 mod sim_rna_parallel;
 pub use sim_rna_parallel::simulate_rna_parallel;
 
-extern "C" {
-    pub fn calc_base_frac(sequence: *const u8, length: usize, frac: *mut f64);
-}
+mod base_frac;
+pub use base_frac::calc_base_frac;
