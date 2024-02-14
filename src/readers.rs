@@ -27,8 +27,9 @@ impl fmt::Display for CustomRecord {
     }
 }
 
+#[allow(clippy::single_char_pattern)]
 pub fn parse_record_size(size: &str) -> Result<u64, std::num::ParseIntError> {
-    let no_underscores = size.replace("'_'", "");
+    let no_underscores = size.replace("_", "");
 
     no_underscores.parse::<u64>()
 }
