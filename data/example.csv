@@ -1,0 +1,4 @@
+location,size,feature
+princeton,100_000,exons
+new_york,10_000,introns
+new_jersey,200_000,genes

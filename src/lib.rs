@@ -40,5 +40,8 @@ pub use sim_rna::simulate_rna;
 mod sim_rna_parallel;
 pub use sim_rna_parallel::simulate_rna_parallel;
 
+mod readers;
+pub use readers::read_csv;
+
 mod base_frac;
 pub use base_frac::calc_base_frac;
