@@ -1,6 +1,6 @@
 use std::cmp::min;
 
-const LEV_ERR_MSG: &'static str = "Input strings are not allowed to contain 'z'.";
+const LEV_ERR_MSG: &str = "Input strings are not allowed to contain 'z'.";
 
 /**
     Calculates the Levenshtein distance between two strings.
