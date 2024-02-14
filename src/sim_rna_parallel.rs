@@ -2,6 +2,26 @@ use crate::sim_rna::simulate_rna;
 use rayon::prelude::*;
 
 pub fn simulate_rna_parallel(n: usize, length: usize) -> Vec<String> {
+    /*
+    Simulates the generation of `n` RNA sequences of a given `length` in parallel.
+
+    This function uses rayon's parallel iterators to generate the RNA sequences concurrently.
+
+    Arguments:
+        * `n` - The number of RNA sequences to generate.
+        * `length` - The length of each RNA sequence.
+
+    Returns:
+        A `Vec<String>` containing `n` RNA sequences, each of length `length`.
+
+    Example:
+
+    let sequences = simulate_rna_parallel(100, 50);
+
+    assert_eq!(sequences.len(), 100);
+    assert!(sequences.iter().all(|seq| seq.len() == 50));
+    */
+
     (0..n)
         .into_par_iter()
         .map(|_| simulate_rna(length))
@@ -16,14 +36,11 @@ mod test_simulate_rna_parallel {
     fn test_simulate_rna_parallel() {
         let sequences: Vec<String> = simulate_rna_parallel(100, 10);
 
-        // Check that we got the right number of sequences
         assert_eq!(sequences.len(), 100);
 
         for sequence in sequences {
-            // Check that each sequence has the right length
             assert_eq!(sequence.len(), 10);
 
-            // Check that each sequence only contains valid RNA nucleotides
             for c in sequence.chars() {
                 assert!(matches!(c, 'A' | 'C' | 'G' | 'U'));
             }

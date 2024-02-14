@@ -1,4 +1,4 @@
-use rna_edit_distance::levenshtein_distance;
+use rna_edit_distance::{levenshtein_distance, calc_base_frac};
 use std::env;
 
 fn main() {
@@ -23,4 +23,18 @@ fn main() {
     } else if let Err(err) = distance {
         eprintln!("Oops, an error was found: {}", err);
     }
+
+    let sequence = b"ACGTACGTACGT";
+    let mut fraction: [f64; 4] = [0.0; 4];
+
+    unsafe {
+        calc_base_frac(sequence.as_ptr(), sequence.len(), fraction.as_mut_ptr());
+    }
+
+    println!(
+	"Found a base fractions of {:?}",
+	fraction
+    );
+
+    assert_eq!(fraction, [0.25, 0.25, 0.25, 0.25]);
 }

@@ -3,6 +3,29 @@ use std::cmp::min;
 const LEV_ERR_MSG: &'static str = "Input strings are not allowed to contain 'z'.";
 
 pub fn levenshtein_distance(s1: &str, s2: &str) -> Result<u64, &'static str> {
+    /*
+    Calculates the Levenshtein distance between two strings.
+
+    The Levenshtein distance is a string metric for measuring the difference between two strings.
+    Informally, the Levenshtein distance between two strings is the minimum number of single-character
+    edits (insertions, deletions or substitutions) required to change one string into the other.
+
+    This function returns an error if either string contains the character 'z'.
+
+    Arguments:
+    * `s1` - The first string to compare.
+    * `s2` - The second string to compare.
+
+    Returns:
+    A `Result<u64, &'static str>`, where the `Ok` variant contains the Levenshtein distance between the two strings,
+    and the `Err` variant contains an error message if either string contains the character 'z'.
+
+    Example:
+
+    let distance = levenshtein_distance("kitten", "sitting").unwrap();
+    assert_eq!(distance, 3);
+    */
+
     let len1: usize = s1.len();
     let len2: usize = s2.len();
 
