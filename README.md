@@ -1,7 +1,9 @@
 # RNA sequence 101
 
-A basic package for RNA sequence analysis, as an example of a working Rust executable & binary.
-For instance, it calculates the edit distance between two strings and calls an external C library for calculating the fraction of each base in a sequence.
+A basic package for RNA sequence analysis with Rust (+C) backend.
+For instance, it calculates the edit distance between two strings
+and calls an external C library for calculating the fraction of
+each base in a sequence.
 
 ## Prerequisites
 - Rust 1.76.0 or later
